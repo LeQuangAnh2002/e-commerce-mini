@@ -12,6 +12,8 @@ import {
 import { toast } from "react-toastify";
 import { CategoryView } from "../../components/admin/CategoryView";
 import { CategoryImageUpload } from "../../components/admin/CategoryImageUpload";
+import {getCategories} from "../../services/CategoriesService";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const ViewCategories = () => {
     document.title = "View Categories";
@@ -36,9 +38,9 @@ export const ViewCategories = () => {
     const [loading, setLoading] = useState(false);
 
     // state to store the categories
-    const [categories, setCategories] = useState({
-        content: [],
-    });
+    const [categories, setCategories] = useState(
+        []
+    );
 
     // state to show/hide delete modal
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -64,11 +66,28 @@ export const ViewCategories = () => {
         setCurrentPage(currentPage + 1);
     };
 
+    useEffect(() =>{
+        if (currentPage === 0){
+            setLoading(true);
+            getCategories()
+                .then((data) => {
+                setCategories(data);
 
+            })
+                .catch(() => {
+                    toast.error("Something went wrong! Please try again later");
+                })
+                .finally(() => {
+                    setLoading(false);
+                })
+
+        }
+    },[])
     return(
         <>
 
             {/* Category Details Modal */}
+
            <Modal show={showCategoryModal} onHide={handleCategoryModalClose}>
                <Modal.Header>
                    <Modal.Title>Category Details</Modal.Title>
@@ -131,6 +150,57 @@ export const ViewCategories = () => {
                    </Modal.Body>
                </Modal.Header>
            </Modal>
+            {/*Sidebar*/}
+            <SideBar show={show} handleClose={handleClose} />
+            <Container>
+                <Row>
+                    <Col>
+                        <h2 className="mt-3">
+                            <i
+                                className="fa-solid fa-bars me-2"
+                                style={{cursor: 'pointer'}}
+                                onClick={handleShow}
+                            />
+                            Categories
+                        </h2>
+                        <hr/>
+                    </Col>
+                </Row>
+                {/*Loading spinner*/}
+                {
+                    loading ? (
+                        <Spinner animation="border" as="span" size="lg"/>
+                     ): categories.length === 0 ? (
+                         <div className="text-center mb-3">
+                             <h3>No categories found!</h3>
+                         </div>
+                    ) : (
+                        <InfiniteScroll
+                        dataLength={categories.content.length}
+                        next={loadNextPage}
+                        hasMore={!categories.lastPage}
+                        loader={
+                            <div className="text-center mb-3">
+                                <Spinner animation="border" as="span" size="lg"/>
+                            </div>
+                        }
+                        >
+                        <Container>
+                            <Row xs={1} md={2} lg={3} xl={4}>
+                                {categories.content.map((category) => {
+                                    return (
+                                        <CategoryView
+                                            category={category}
+                                            key={category.categoryId}
+                                            showDeleteModal={handleDeleteModalShow}
+                                            showCategoryModal={handleCategoryModalShow}
+                                        />
+                                    );
+                                })}
+                            </Row>
+                        </Container>
+                        </InfiniteScroll>)}
+            </Container>
             </>
     );
 };

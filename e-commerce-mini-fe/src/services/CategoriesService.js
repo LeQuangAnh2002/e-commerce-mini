@@ -25,6 +25,7 @@ export const getCategories = (
             `${API_ENDPOINTS.CATEGORIES}?pageNumber=${currentPage}&pageSize=${pageSize}`
         )
         .then((res) => {
+            console.log(res);
             return res.data;
         });
 };

@@ -79,7 +79,7 @@ export const ImageUpload = (props) => {
                         variant="primary"
                         className="mb-3"
                         type="submit"
-                        disabled={loading || formik.values.image === null}
+                        // disabled={loading || formik.values.image === null}
                     >
                         <Spinner
                             animation="border"

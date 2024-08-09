@@ -13,6 +13,10 @@ import {Footer} from "./components/Footer";
 import {CategoryProvider} from "./context/CategoryProvider";
 import {Profile} from "./pages/users/Profile";
 import {ShoppingCart} from "./pages/users/ShoppingCart";
+import {Error404} from "./pages/Error404";
+import {AddCategory} from "./pages/admin/AddCategory";
+import {ViewCategories} from "./pages/admin/ViewCategories";
+import {AddProduct} from "./pages/admin/AddProduct";
 function App() {
   // state for category sidebar
   const [showCategorySidebar, setShowCategorySidebar] = useState(false);
@@ -44,11 +48,23 @@ function App() {
 
                     <Route path="/profile" element={<Profile />}/>
                     <Route path="/cart" element={<ShoppingCart />}/>
-                    <Route path="/place-order" element={<OrderCheckout />}/>
-                    <Route path="/orders" element={<Orders />}/>
-                    <Route path="/order/:orderId" element={<OrderDetail />}/>
+                    {/*<Route path="/place-order" element={<OrderCheckout />}/>*/}
+                    {/*<Route path="/orders" element={<Orders />}/>*/}
+                    {/*<Route path="/order/:orderId" element={<OrderDetail />}/>*/}
+                </Route>
+                {/* Routes only admin can access*/}
+                <Route
+                    // element={<PrivateRoutes allowedRole={[ROLES.ADMIN]} />}
+                    >
+                    <Route path="/admin/add-category" element={<AddCategory />}/>
+                    <Route path="/admin/categories" element={<ViewCategories />}/>
+                    <Route path="/admin/add-product" element={<AddProduct />}/>
+                    {/*<Route path="/admin/products" element={<ViewProducts />}/>*/}
+                    {/*<Route path="/admin/orders" element={<ViewOrders />}/>*/}
+                    {/*<Route path="/admin/users" element={<ViewUsers />}/>*/}
                 </Route>
 
+                <Route path="*" element={<Error404/>}/>
 
             </Routes>
             <Footer/>

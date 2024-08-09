@@ -87,7 +87,7 @@ export const SideBar = ({ show, handleClose }) => {
                     ) : (
                         ""
                     )}
-                    <Nav.Link className="list-group-item sidebar-item" onClick={doLogout}>
+                    <Nav.Link className="list-group-item sidebar-item">
                         <i className="fa-solid fa-right-from-bracket me-2"/>
                         <span>Logout</span>
                     </Nav.Link>

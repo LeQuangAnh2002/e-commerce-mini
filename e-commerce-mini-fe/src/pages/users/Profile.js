@@ -76,7 +76,7 @@ export const Profile = () =>{
                         )}
 
                         {/* Profile Form */}
-                        <Form noValidate onSubmit={handleSubmit}>
+                        <Form noValidate >
                             <Row>
                                 <Form.Group
                                     as={Col}
